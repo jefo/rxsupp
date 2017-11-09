@@ -7,8 +7,6 @@ export const SEND_MESSAGE_FAIL = 'SEND_MESSAGE_FAIL';
 
 const initialState = OrderedMap();
 
-const messageId = -1;
-
 const ws = {
     send: () => null
 };
