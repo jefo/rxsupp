@@ -1,4 +1,4 @@
-import { OrderedSet } from 'immutable';
+import { OrderedMap } from 'immutable';
 import { call, put, takeEvery, takeLatest } from 'redux-saga/effects'
 
 export const SEND_MESSAGE = 'SEND_MESSAGE';
@@ -13,27 +13,34 @@ const ws = {
     send: () => null
 };
 
-const sendMessage = (text) => {
+export const sendMessage = (text) => {
     let timestamp = new Date().getTime();
     let message = {
-        text,
         timestamp,
+        text,
         isInc: false,
         isSent: false
     };
-    try {
-        ws.send(message);
-        message.isSent = true;
-        yield put({ type: SEND_MESSAGE_SUCCESS, message });
-    }
-    catch (e) {
-        message.error = e;
-        yield put({ type: SEND_MESSAGE_FAIL, message });
-    }
+    return {
+        type: SEND_MESSAGE,
+        payload: message
+    };
 };
 
+export function* sendMessageSaga({ payload }) {
+    try {
+        yield call(ws.send, payload);
+        payload.isSent = true;
+        yield put({ payload, type: SEND_MESSAGE_SUCCESS });
+    }
+    catch (e) {
+        payload.error = e;
+        yield put({ payload, type: SEND_MESSAGE_FAIL });
+    }
+}
+
 export function* saga() {
-    yield takeLatest(SEND_MESSAGE, sendMessage);
+    yield takeEvery(SEND_MESSAGE, sendMessageSaga);
 }
 
 export default (state = initialState, { type, payload }) => {

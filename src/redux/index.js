@@ -1,10 +1,10 @@
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import chat, { saga } from './chat/chat';
 
 const sagaMiddleware = createSagaMiddleware();
 
-const store = createStore(
+export default createStore(
     chat,
     applyMiddleware(sagaMiddleware)
 );
