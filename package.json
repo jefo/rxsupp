@@ -1,0 +1,29 @@
+{
+  "name": "rxsupp",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "jefo <johnyjefo@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "neutrino start --use neutrino-preset-react",
+    "build": "neutrino build --use neutrino-preset-react",
+    "test": "neutrino test --use neutrino-preset-react neutrino-preset-karma"
+  },
+  "dependencies": {
+    "immutable": "^3.8.2",
+    "lodash": "^4.17.4",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2",
+    "redux-saga": "^0.16.0",
+    "reselect": "^3.0.1"
+  },
+  "devDependencies": {
+    "neutrino": "^7.3.1",
+    "neutrino-preset-karma": "^7.3.1",
+    "neutrino-preset-mocha": "^7.3.1",
+    "neutrino-preset-react": "^7.3.1",
+    "react-addons-test-utils": "^15.6.2"
+  }
+}
