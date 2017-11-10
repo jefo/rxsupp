@@ -1,5 +1,9 @@
 import { OrderedMap } from 'immutable';
 import { call, put, takeEvery, takeLatest } from 'redux-saga/effects'
+console.log(Buffer)
+import io from 'socket.io-client';
+
+export const socket = io('http://localhost:3000');
 
 export const SEND_MESSAGE = 'SEND_MESSAGE';
 export const SEND_MESSAGE_SUCCESS = 'SEND_MESSAGE_SUCCESS';
@@ -7,39 +11,20 @@ export const SEND_MESSAGE_FAIL = 'SEND_MESSAGE_FAIL';
 
 const initialState = OrderedMap();
 
-const ws = {
-    send: () => null
-};
-
 export const sendMessage = (text) => {
     let timestamp = new Date().getTime();
     let message = {
         timestamp,
         text,
         isInc: false,
-        isSent: false
+        isSent: false,
+        userId: 1
     };
     return {
         type: SEND_MESSAGE,
         payload: message
     };
 };
-
-export function* sendMessageSaga({ payload }) {
-    try {
-        yield call(ws.send, payload);
-        payload.isSent = true;
-        yield put({ payload, type: SEND_MESSAGE_SUCCESS });
-    }
-    catch (e) {
-        payload.error = e;
-        yield put({ payload, type: SEND_MESSAGE_FAIL });
-    }
-}
-
-export function* saga() {
-    yield takeEvery(SEND_MESSAGE, sendMessageSaga);
-}
 
 export default (state = initialState, { type, payload }) => {
     switch (type) {

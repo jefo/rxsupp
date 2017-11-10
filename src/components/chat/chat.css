@@ -17,12 +17,17 @@
     width: 100%;
 }
 
-.sent-message {
-    padding: 5px;
-    color: green;
+.msg {
+    transition: color 1.5s ease;
 }
 
-.response-message {
+.sent {
     padding: 5px;
-    color: red;
+    color: green;
+
+}
+
+.sending {
+    padding: 5px;
+    color: grey;
 }

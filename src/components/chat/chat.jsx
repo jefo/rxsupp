@@ -7,9 +7,6 @@ import './chat.css';
 
 const mapStateToProps = (state, ownProps) => {
     let messages = Object.values(state.toJS());
-    console.log('msgs', messages);
-    console.log('ownProps', ownProps);
-    
     return { messages };
 };
 
@@ -33,8 +30,8 @@ class Chat extends React.Component {
     render() {
         let { messages } = this.props;
         const messageItems = messages.map(msg => {
-            let msgClass = msg.isInc? 'response-message': 'sent-message';
-            return <div key={msg.timestamp} className={msgClass}>{msg.text}</div>
+            let msgStatusClass = msg.isSent ? 'sent' : 'sending';
+            return <div key={msg.timestamp} className={'msg ' + msgStatusClass}>{msg.text}</div>
         });
         return (
             <div className="chat">
