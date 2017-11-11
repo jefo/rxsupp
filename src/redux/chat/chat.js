@@ -1,15 +1,16 @@
 import { OrderedMap } from 'immutable';
-import { call, put, takeEvery, takeLatest } from 'redux-saga/effects'
-console.log(Buffer)
-import io from 'socket.io-client';
+import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
+import { combineReducers } from 'redux';
 
-export const socket = io('http://localhost:3000');
-
+export const USER_CONNECTED = 'CONNECTION_OPEN';
+export const USER_EMAIL_SEND = 'USER_EMAIL_SEND';
 export const SEND_MESSAGE = 'SEND_MESSAGE';
 export const SEND_MESSAGE_SUCCESS = 'SEND_MESSAGE_SUCCESS';
 export const SEND_MESSAGE_FAIL = 'SEND_MESSAGE_FAIL';
+export const RECEIVE_MESSAGE = 'RECEIVE_MESSAGE';
+export const RECEIVE_MESSAGE_SUCCESS = 'RECEIVE_MESSAGE_SUCCESS';
+export const RECEIVE_MESSAGE_FAIL = 'RECEIVE_MESSAGE_FAIL';
 
-const initialState = OrderedMap();
 
 export const sendMessage = (text) => {
     let timestamp = new Date().getTime();
@@ -26,7 +27,9 @@ export const sendMessage = (text) => {
     };
 };
 
-export default (state = initialState, { type, payload }) => {
+const messagesInitialState = OrderedMap();
+
+const messages = (state = messagesInitialState, { type, payload }) => {
     switch (type) {
         case SEND_MESSAGE:
         case SEND_MESSAGE_SUCCESS:
@@ -36,3 +39,21 @@ export default (state = initialState, { type, payload }) => {
             return state;
     }
 }
+
+const usersInitialState = OrderedMap();
+
+const users = (state = usersInitialState, { type, payload }) => {
+    switch (type) {
+        case USER_CONNECTED:
+            return state.set(payload, { id: payload });
+        case USER_EMAIL_SEND:
+            return state.set(payload.id, payload)
+        default:
+            return state;
+    }
+}
+
+export default combineReducers({
+    users,
+    messages
+});
