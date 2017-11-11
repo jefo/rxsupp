@@ -17,12 +17,10 @@ export default store => {
         if (localStorage.getItem('user')) {
             email = JSON.parse(localStorage.getItem('user')).email;
         } else {
-            email = 'anon@eewew.com';
+            email = 'anon@test.com';
         }
         socket.emit(USER_LOGIN, email);
         store.dispatch({ type: USER_CONNECTED, payload: socket.id });
-        // todo: check is operator online. 
-        store.dispatch(sendMessage('Привет. Если не затруднит, напишите адрес электронной почты, тогда мы сможем прислать Вам ответ на почту.'))
     });
     socket.on(SEND_MESSAGE_SUCCESS, (msg) => {
         msg.isSent = true;
