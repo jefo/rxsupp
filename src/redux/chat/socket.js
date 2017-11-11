@@ -15,7 +15,7 @@ export default store => {
     socket.on('connect', () => {
         let email;
         if (localStorage.getItem('user')) {
-            email = localStorage.getItem('user').email;
+            email = JSON.parse(localStorage.getItem('user')).email;
         } else {
             email = 'anon@eewew.com';
         }
@@ -49,7 +49,7 @@ export default store => {
                 }
                 return next(action);
             case USER_LOGIN_SUCCESS:
-                localStorage.setItem('user', action.payload);
+                localStorage.setItem('user', JSON.stringify(action.payload));
                 return next(action);
             default:
                 return next(action);
