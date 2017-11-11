@@ -61,6 +61,7 @@ class Chat extends React.Component {
         if (e.key !== 'Enter') {
             return;
         }
+        e.preventDefault();
         this.sendMessage();
     }
 
