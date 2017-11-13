@@ -1,16 +1,25 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { sendMessage } from '../../redux/chat/chat';
+import { sendMessage, connectWithUser } from '../../redux/chat/chat';
 import store from '../../redux';
 import './chat.css';
 
+const serverUser = { name: 'server' };
+
 const mapStateToProps = (state, ownProps) => {
+    const users = state.users.toJS();
+    let usersArr = Object.values(users);
+    if (usersArr.length === 0) {
+        return { messages: [], users: [] }
+    }
     let messages = Object.values(state.messages.toJS());
-    let users = state.users.toJS();
-    messages = messages.map(msg => Object.assign({}, msg, { userName: users[msg.userId].name }));
-    users = Object.values(users);
-    return { users, messages };
+    messages = messages.map(msg => {
+        let user = msg.userId ? users[msg.userId] : serverUser;
+        return Object.assign({}, msg, { userName: user.name, fromCurrent: user.isCurrent })
+    });
+    usersArr = usersArr.filter(user => user.isOnline && !user.isCurrent);
+    return { users: usersArr, messages };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -32,23 +41,40 @@ class Chat extends React.Component {
     }
 
     render() {
-        let { messages } = this.props;
+        let { messages, users } = this.props;
         const messageItems = messages.map(msg => {
             let msgStatusClass = msg.isSent ? 'sent' : 'sending';
-            return (<div key={msg.timestamp}>
-                <span className="user-name">{msg.userName}:&nbsp;</span>
-                <span className={'msg ' + msgStatusClass}>{msg.text}</span>
-            </div>);
+            let userClassName = msg.fromCurrent? 'user-name user-name_current': 'user-name';            
+            return (
+                <div key={msg.timestamp}>
+                    <span className={userClassName}>{msg.userName}:&nbsp;</span>
+                    <span className={'msg ' + msgStatusClass}>{msg.text}</span>
+                </div>
+            );
+        });
+        const usersItems = users.map(user => {
+            return (
+                <div key={user.id} onClick={() => this.onUserClick(user.id)} className='users-list__item'>
+                    {user.name}
+                </div>
+            );
         });
         return (
             <div className="chat">
-                <div className="output">
-                    {messageItems}
+                <div className="chat-wrapper">
+                    <div className="users-list">
+                        {usersItems}
+                    </div>
+                    <div className="output-wrapper">
+                        <div className="output">
+                            {messageItems}
+                        </div>
+                        <textarea className="input" onKeyPress={this.onInputKeyPress} value={this.state.message} onChange={this.onInputChange}></textarea>
+                        <button className="btn-send" onClick={this.onSendMessage}>Send</button>
+                    </div>
                 </div>
-                <textarea className="input" onKeyPress={this.onInputKeyPress} value={this.state.message} onChange={this.onInputChange}></textarea>
-                <button className="btn-send" onClick={this.onSendMessage}>Send</button>
             </div>
-        )
+        );
     }
 
     onInputChange(e) {
@@ -72,6 +98,10 @@ class Chat extends React.Component {
     sendMessage() {
         store.dispatch(sendMessage(this.state.message));
         this.setState({ message: '' });
+    }
+
+    onUserClick(e) {
+        store.dispatch(connectWithUser(this.state.message));
     }
 }
 

@@ -19,6 +19,7 @@
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
+    "redux-logger": "^3.0.6",
     "redux-saga": "^0.16.0",
     "reselect": "^3.0.1",
     "socket.io": "^2.0.4",
@@ -29,6 +30,8 @@
     "neutrino-preset-karma": "^7.3.1",
     "neutrino-preset-mocha": "^7.3.1",
     "neutrino-preset-react": "^7.3.1",
-    "react-addons-test-utils": "^15.6.2"
+    "react-addons-test-utils": "^15.6.2",
+    "redux-devtools": "^3.4.1",
+    "redux-devtools-inspector": "^0.11.3"
   }
 }
