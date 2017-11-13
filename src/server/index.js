@@ -28,9 +28,11 @@ io.on('connection', (socket) => {
             isAnon: true
         };
     }
-    socket.join(ticketId);    
+    socket.join(ticketId);
+
     console.log('ADD_USER:', currentUser.name);
     socket.emit('ADD_USER', { messages, users });
+    socket.broadcast.to(ticketId).emit('ADD_USER', { messages, users });
 
     socket.on('SEND_MESSAGE', (msg) => {
         messages[msg.id] = msg;
