@@ -1496,7 +1496,7 @@ colormin@^1.0.5:
     css-color-names "0.0.4"
     has "^1.0.1"
 
-colors@^1.1.0, colors@~1.1.2:
+colors@^1.1.0, colors@^1.1.2, colors@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/colors/-/colors-1.1.2.tgz#168a4701756b6a7f51a12ce0c97bfa28c084ed63"
 
@@ -5331,6 +5331,12 @@ reduce-function-call@^1.0.1:
   resolved "https://registry.yarnpkg.com/reduce-function-call/-/reduce-function-call-1.0.2.tgz#5a200bf92e0e37751752fe45b0ab330fd4b6be99"
   dependencies:
     balanced-match "^0.4.2"
+
+redux-cli-logger@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/redux-cli-logger/-/redux-cli-logger-2.0.0.tgz#54314147b2bd3b0e8275f862ea7553b19e63f60b"
+  dependencies:
+    colors "^1.1.2"
 
 redux-devtools-inspector@^0.11.3:
   version "0.11.3"

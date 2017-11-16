@@ -16,7 +16,8 @@ const mapStateToProps = (state, ownProps) => {
     let messages = Object.values(state.messages.toJS());
     messages = messages.map(msg => {
         let user = msg.userId ? users[msg.userId] : serverUser;
-        return Object.assign({}, msg, { userName: user.name, fromCurrent: user.isCurrent })
+        let userName = user.login? user.login: 'Пользователь';
+        return Object.assign({}, msg, { userName, fromCurrent: user.isCurrent })
     });
     usersArr = usersArr.filter(user => user.isOnline && !user.isCurrent);
     return { users: usersArr, messages };
@@ -54,8 +55,8 @@ class Chat extends React.Component {
         });
         const usersItems = users.map(user => {
             return (
-                <div key={user.id} onClick={() => this.onUserClick(user.id)} className='users-list__item'>
-                    {user.name}
+                <div key={user.login} onClick={() => this.onUserClick(user.id)} className='users-list__item'>
+                    {user.login || user.name}
                 </div>
             );
         });

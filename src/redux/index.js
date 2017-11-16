@@ -13,7 +13,7 @@ const logger = createLogger({
             } else {
                 newState[i] = state[i];
             }
-        };
+        }
         return newState;
     }
 });

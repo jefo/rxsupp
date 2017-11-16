@@ -1,11 +1,8 @@
 const io = require('socket.io')(3000);
-let operator;
+const usersRepository = require('./usersRepository');
 
-const operators = {
-    1: 'jefo.operator@gmail.com'
-};
+const operators = ['jefo.operator@gmail.com'];
 
-const users = {};
 const messages = {};
 let counter = 0;
 let ticketId;
@@ -15,29 +12,37 @@ io.on('connection', (socket) => {
 
     const socketConnections = [];
 
-    let currentUser = users[socket.id];
+    let currentUser = usersRepository.findBySocketId(socket.id);
     if (!currentUser) {
         if (!ticketId) {
             ticketId = new Date().getTime().toString();
         }
-        currentUser = users[socket.id] = {
+        currentUser = {
             ticketId,
-            id: socket.id,
-            name: socket.id,
-            isOnline: true,
-            isAnon: true
+            login: socket.id,
+            isOnline: true
         };
+    } else {
+        currentUser.isOnline = true;
+        currentUser.ticketId = ticketId;
     }
+
+    usersRepository.addOrUpdate(currentUser);
+
     socket.join(ticketId);
 
-    console.log('ADD_USER:', currentUser.name);
-    socket.emit('ADD_USER', { messages, users });
-    socket.broadcast.to(ticketId).emit('ADD_USER', { messages, users });
+    io.in(ticketId).emit('ADD_USER', { messages, users });
 
     socket.on('SEND_MESSAGE', (msg) => {
-        messages[msg.id] = msg;
+        messages[msg.timestamp] = msg;
         console.log('ADD_MESSAGE:', msg.text);
         socket.broadcast.to(ticketId).emit('ADD_MESSAGE', msg);
+    });
+
+    socket.on('USER_LOGIN', (user) => {
+        user.isOperator = operators.some(login => user.login === login);
+        usersRepository.addOrUpdate(user);
+        io.in(ticketId).emit('USER_LOGIN', user);
     });
 
     socket.on('CONNECT_WITH_USER', (id) => {
@@ -49,10 +54,9 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', (reason) => {
-        const user = users[socket.id];
+        const user = usersRepository.findBySocketId(user.socketId);
         user.isOnline = false;
-        socket.to(ticketId).emit('SET_USER_OFFLINE', { user });
-        console.log('SET_USER_OFFLINE', user.id);
+        socket.to(ticketId).emit('SET_USER_OFFLINE', user);
     });
 });
 
