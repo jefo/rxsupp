@@ -11,12 +11,18 @@
     background-color: #f1f2f7;
     padding: 15px 10px;
     border-radius: 3px;
+    transition: width 2s, height 2s
+}
+
+.chat.maximized {
+    width: 90%;
+    height: 90%;
 }
 
 .chat-wrapper {
     display: flex;
     justify-content: space-between;
-    width: 500px;
+    min-width: 500px;
 }
 
 .output {
@@ -82,4 +88,20 @@
 .users-list {
     flex: 0 0 170px;
     margin-right: 10px;
+}
+
+.maximize {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background-image: url('./icons/maximize.svg');
+    cursor: pointer;
+}
+
+.minimize {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background-image: url('./icons/minimize.svg');
+    cursor: pointer;
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import classNames from 'classnames';
 import { sendMessage, connectWithUser } from '../../redux/chat/chat';
 import store from '../../redux';
 import './chat.css';
@@ -16,7 +17,7 @@ const mapStateToProps = (state, ownProps) => {
     let messages = Object.values(state.messages.toJS());
     messages = messages.map(msg => {
         let user = msg.userId ? users[msg.userId] : serverUser;
-        let userName = user.login? user.login: 'Пользователь';
+        let userName = user.login ? user.login : 'Пользователь';
         return Object.assign({}, msg, { userName, fromCurrent: user.isCurrent })
     });
     usersArr = usersArr.filter(user => user.isOnline && !user.isCurrent);
@@ -38,6 +39,7 @@ class Chat extends React.Component {
         this.onInputChange = this.onInputChange.bind(this);
         this.onSendMessage = this.onSendMessage.bind(this);
         this.onInputKeyPress = this.onInputKeyPress.bind(this);
+        this.onWinControlClick = this.onWinControlClick.bind(this);
         this.state = {};
     }
 
@@ -45,7 +47,7 @@ class Chat extends React.Component {
         let { messages, users } = this.props;
         const messageItems = messages.map(msg => {
             let msgStatusClass = msg.isSent ? 'sent' : 'sending';
-            let userClassName = msg.fromCurrent? 'user-name user-name_current': 'user-name';            
+            let userClassName = msg.fromCurrent ? 'user-name user-name_current' : 'user-name';
             return (
                 <div key={msg.timestamp}>
                     <span className={userClassName}>{msg.userName}:&nbsp;</span>
@@ -60,8 +62,15 @@ class Chat extends React.Component {
                 </div>
             );
         });
+        let winIconClassName = this.state.isMaximized ? 'minimize' : 'maximize';
+        let chatClassNames = classNames('chat', {
+            maximized: this.state.isMaximized
+        });
         return (
-            <div className="chat">
+            <div className={chatClassNames}>
+                <div className="window-controls">
+                    <span className={winIconClassName} onClick={this.onWinControlClick}></span>
+                </div>
                 <div className="chat-wrapper">
                     <div className="users-list">
                         {usersItems}
@@ -103,6 +112,13 @@ class Chat extends React.Component {
 
     onUserClick(e) {
         store.dispatch(connectWithUser(this.state.message));
+    }
+
+    onWinControlClick() {
+        let isMaximized = this.state.isMaximized;
+        this.setState({
+            isMaximized: !isMaximized
+        });
     }
 }
 
