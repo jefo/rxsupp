@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import classNames from 'classnames';
-import { sendMessage, connectWithUser } from '../../redux/chat/chat';
 import store from '../../redux';
 import './chat.css';
 
@@ -27,7 +26,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => {
     return {
         onSendMessage: e => {
-            dispatch(sendMessage(this.message));
+            // dispatch(sendMessage(this.message));
         }
     }
 };
@@ -36,6 +35,7 @@ class Chat extends React.Component {
 
     constructor(props) {
         super(props);
+        
         this.onInputChange = this.onInputChange.bind(this);
         this.onSendMessage = this.onSendMessage.bind(this);
         this.onInputKeyPress = this.onInputKeyPress.bind(this);
@@ -106,12 +106,12 @@ class Chat extends React.Component {
     }
 
     sendMessage() {
-        store.dispatch(sendMessage(this.state.message));
+        // store.dispatch(sendMessage(this.state.message));
         this.setState({ message: '' });
     }
 
     onUserClick(e) {
-        store.dispatch(connectWithUser(this.state.message));
+        // store.dispatch(connectWithUser(this.state.message));
     }
 
     onWinControlClick() {

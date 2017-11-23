@@ -5342,6 +5342,10 @@ redux-cli-logger@^2.0.0:
   dependencies:
     colors "^1.1.2"
 
+redux-devtools-extension@^2.13.2:
+  version "2.13.2"
+  resolved "https://registry.yarnpkg.com/redux-devtools-extension/-/redux-devtools-extension-2.13.2.tgz#e0f9a8e8dfca7c17be92c7124958a3b94eb2911d"
+
 redux-devtools-inspector@^0.11.3:
   version "0.11.3"
   resolved "https://registry.yarnpkg.com/redux-devtools-inspector/-/redux-devtools-inspector-0.11.3.tgz#f141c32f9e38d520a5ca17fef9f527609b1999bf"
@@ -5380,6 +5384,10 @@ redux-devtools@^3.4.1:
     lodash "^4.2.0"
     prop-types "^15.5.7"
     redux-devtools-instrument "^1.0.1"
+
+redux-dynamic-middlewares@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/redux-dynamic-middlewares/-/redux-dynamic-middlewares-0.2.1.tgz#e87a8f7ddc0ef7d0dac71c3adbffa0c27b8d832a"
 
 redux-logger@^3.0.6:
   version "3.0.6"
@@ -6368,7 +6376,7 @@ uuid@^2.0.2:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-2.0.3.tgz#67e2e863797215530dff318e5bf9dcebfd47b21a"
 
-uuid@^3.0.0:
+uuid@^3.0.0, uuid@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.1.0.tgz#3dd3d3e790abc24d7b0d3a034ffababe28ebbc04"
 
