@@ -19,6 +19,9 @@ export const Statuses = {
 export const actionTypes = {
     // chat
     CHAT_UPDATE: 'CHAT_UPDATE',
+    CHAT_INIT: 'CHAT_INIT',
+    CHAT_READY: 'CHAT_READY',
+    CHAT_SET_ROOM: 'CHAT_SET_ROOM',
 
     // user   
     USER_ADD: 'USER_ADD',
@@ -40,20 +43,22 @@ export const actions = {
         let timestamp = new Date().getTime();
         let message = {
             timestamp,
-            text,
-            userId: null
+            text
         };
         return {
-            type: MESSAGE_SEND,
-            payload: message
+            type: actionTypes.MESSAGE_SEND,
+            payload: message,
+            meta: { event: actionTypes.MESSAGE_SEND }
         };
     },
-    connectWithUser: (id) => ({ type: CONNECT_WITH_USER, payload: id }),
-    updateUser: (user) => ({ type: USER_UPDATE, payload: user }),
-    addUser: (user) => ({ type: USER_ADD, payload: user }),
-    updateStatus: (status) => ({ type: USER_UPDATE_STATUS, payload: { socketId, status } }),
-    updateConnection: (socket) => ({ type: CONNECTION_UPDATE, payload: { socket } }),
-    updateConnectionStatus: (socket, status) => ({ type: CONNECTION_UPDATE, payload: { socket, status } }),
+    addMessage: (message) => ({ type: actionTypes.MESSAGE_ADD, payload: message }),
+    connectWithUser: (id) => ({ type: actionTypes.CONNECT_WITH_USER, payload: id }),
+    updateUser: (user) => ({ type: actionTypes.USER_UPDATE, payload: user }),
+    addUser: (user) => ({ type: actionTypes.USER_ADD, payload: user }),
+    updateStatus: (status) => ({ type: actionTypes.USER_UPDATE_STATUS, payload: { socketId, status } }),
+    updateConnection: (socket) => ({ type: actionTypes.CONNECTION_UPDATE, payload: { socket } }),
+    updateConnectionStatus: (socket, status) => ({ type: actionTypes.CONNECTION_UPDATE, payload: { socket, status } }),
+    init: (payload) => ({ type: actionTypes.CHAT_INIT, payload })
 };
 
 export const selectors = {
@@ -73,10 +78,11 @@ const messagesInitialState = OrderedMap();
 const messages = (state = messagesInitialState, { type, payload }) => {
     switch (type) {
         case actionTypes.CHAT_INIT:
-            return state.merge(payload.messages);
+            return state.merge(fromJS(payload.messages));
         case actionTypes.MESSAGE_ADD:
+            return state.set(payload.timestamp, fromJS(payload))
         case actionTypes.MESSAGE_SEND:
-            return state.set(payload.timestamp, payload);
+            return state.set(payload.timestamp, fromJS(payload));
         default:
             return state;
     }
@@ -84,11 +90,19 @@ const messages = (state = messagesInitialState, { type, payload }) => {
 
 const usersInitialState = OrderedMap();
 
+/* 
+statuses are:
+ connected, reconnecting, reconnect error,
+ reconnect failed, disconnect, error, connect_timeout,
+ connect error
+*/
 const users = (state = usersInitialState, { type, payload }) => {
     switch (type) {
         case actionTypes.CHAT_INIT:
             return state.merge(fromJS(payload.users));
         case actionTypes.USER_UPDATE:
+            let key = payload.login ? payload.login : payload.socketId;
+            return state.update(key, user => user.merge(payload));
         case actionTypes.USER_ADD:
             return state.set(payload.login, fromJS(payload));
         case actionTypes.USER_UPDATE_STATUS:
@@ -99,19 +113,10 @@ const users = (state = usersInitialState, { type, payload }) => {
     }
 }
 
-/* 
-statuses are:
- connected, reconnecting, reconnect error,
- reconnect failed, disconnect, error, connect_timeout,
- connect error
-*/
 const connection = (state = OrderedMap(), { type, payload }) => {
     switch (type) {
-        case actionTypes.CONNECTION_UPDATE:
-            let { socket, status } = payload;
-            state = state.set('socket', socket);
-            status = status ? status : Statuses.CONNECTED;
-            return state.set('status', status);
+        case actionTypes.CHAT_INIT:
+            return state.set('socketId', payload.socketId);
         default:
             return state;
     }

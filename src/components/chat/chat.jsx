@@ -2,26 +2,37 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import classNames from 'classnames';
-import store from '../../redux';
+import store, { chatService } from '../../redux';
+
 import './chat.css';
 
 const serverUser = { name: 'server' };
 
-const mapStateToProps = (state, ownProps) => {
-    const users = state.users.toJS();
-    let usersArr = Object.values(users);
-    if (usersArr.length === 0) {
-        return { messages: [], users: [] }
+const mapStateToProps = (state, ownProps) => createSelector(
+    state => state.users,
+    state => state.messages,
+    state => state.connection,
+    (users, messages, connection) => {
+        let socketId = connection.get('socketId');
+        if (!socketId) {
+            return { users: [], messages: [] };
+        }
+        let currentUser = users.find(user => user.get('socketId') === socketId);
+        if (!currentUser) {
+            return { users: [], messages: [] };
+        }
+        messages = messages
+            .filter(message =>
+                message.get('roomId') === currentUser.get('roomId'))
+            .map(message =>
+                message
+                    .set('fromCurrent', message.get('socketId') === socketId)
+                    .set('userName', users.find(user => user.get('socketId') === message.get('socketId')).get('login')))
+            .toJS();
+        users = users.filter(user => user.get('status') !== 'disconnect' && user.get('socketId') !== socketId).toJS();
+        return { users: Object.values(users), messages: Object.values(messages) };
     }
-    let messages = Object.values(state.messages.toJS());
-    messages = messages.map(msg => {
-        let user = msg.userId ? users[msg.userId] : serverUser;
-        let userName = user.login ? user.login : 'Пользователь';
-        return Object.assign({}, msg, { userName, fromCurrent: user.isCurrent })
-    });
-    usersArr = usersArr.filter(user => user.isOnline && !user.isCurrent);
-    return { users: usersArr, messages };
-};
+);
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -35,7 +46,7 @@ class Chat extends React.Component {
 
     constructor(props) {
         super(props);
-        
+
         this.onInputChange = this.onInputChange.bind(this);
         this.onSendMessage = this.onSendMessage.bind(this);
         this.onInputKeyPress = this.onInputKeyPress.bind(this);
@@ -106,7 +117,7 @@ class Chat extends React.Component {
     }
 
     sendMessage() {
-        // store.dispatch(sendMessage(this.state.message));
+        chatService.sendMessage(this.state.message);
         this.setState({ message: '' });
     }
 
