@@ -3,7 +3,8 @@ import TestUtils from 'react-dom/test-utils';
 import ReactDOM from 'react-dom';
 import Chat from '../src/components/chat';
 
-describe('chat', () => {
+describe('chat component', () => {
+
   it('should be sane', () => {
     assert.equal(true, !false);
   });

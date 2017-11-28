@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import classNames from 'classnames';
-import store, { chatService } from '../../redux';
 
 import './chat.css';
 
@@ -11,9 +10,9 @@ const serverUser = { name: 'server' };
 const mapStateToProps = (state, ownProps) => createSelector(
     state => state.users,
     state => state.messages,
-    state => state.connection,
-    (users, messages, connection) => {
-        let socketId = connection.get('socketId');
+    state => state.socket,
+    (users, messages, socket) => {
+        let socketId = socket.get('id');
         if (!socketId) {
             return { users: [], messages: [] };
         }
@@ -21,16 +20,18 @@ const mapStateToProps = (state, ownProps) => createSelector(
         if (!currentUser) {
             return { users: [], messages: [] };
         }
+        let roomId = currentUser.get('roomId');
+        console.log('roomId',roomId);
         messages = messages
             .filter(message =>
-                message.get('roomId') === currentUser.get('roomId'))
+                message.get('roomId') === roomId)
             .map(message =>
                 message
                     .set('fromCurrent', message.get('socketId') === socketId)
                     .set('userName', users.find(user => user.get('socketId') === message.get('socketId')).get('login')))
             .toJS();
         users = users.filter(user => user.get('status') !== 'disconnect' && user.get('socketId') !== socketId).toJS();
-        return { users: Object.values(users), messages: Object.values(messages) };
+        return { users: Object.values(users), messages: Object.values(messages), socketId, roomId };
     }
 );
 
@@ -68,7 +69,7 @@ class Chat extends React.Component {
         });
         const usersItems = users.map(user => {
             return (
-                <div key={user.login} onClick={() => this.onUserClick(user.id)} className='users-list__item'>
+                <div key={user.login} onClick={() => this.onUserClick(user)} className='users-list__item'>
                     {user.login || user.name}
                 </div>
             );
@@ -117,12 +118,13 @@ class Chat extends React.Component {
     }
 
     sendMessage() {
-        chatService.sendMessage(this.state.message);
+        chatService.sendMessage(this.state.message, this.props.roomId);
         this.setState({ message: '' });
     }
 
-    onUserClick(e) {
-        // store.dispatch(connectWithUser(this.state.message));
+    onUserClick(user) {
+        // console.log(e)
+        chatService.setUserRoom(user.roomId);
     }
 
     onWinControlClick() {
