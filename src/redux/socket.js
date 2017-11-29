@@ -5,7 +5,9 @@ import { CHAT_INIT } from '../../../rxsupp.core/src/chat';
 export default (state = Map(), { type, payload }) => {
     switch (type) {
         case CHAT_INIT:
-            return state.set('id', payload.socketId);
+            return state
+            .set('id', payload.socketId)
+            .set('userId', payload.userId);
         default: 
             return state;
     }

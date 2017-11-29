@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux'
 import io from 'socket.io-client';
+import uuid from 'uuid/v1';
 
 import Chat from './components/chat/chat';
 import {
@@ -13,12 +14,17 @@ import {
 } from '../../rxsupp.core/src/chat';
 import store from './redux/store';
 
-const socket = io('http://localhost:3000');
+let ioOptions = {};
+
+if(localStorage.userId) {
+    ioOptions.query = { userId: localStorage.userId }
+}
+
+const socket = io('http://localhost:3000', ioOptions);
 const chat = createChat(store);
 
 // socket-redux event handler map
 const bindings = {
-    [CHAT_INIT]: chat.init,
     [USER_ADD]: chat.addUser,
     [USER_UPDATE]: chat.updateUser,
     [MESSAGE_ADD]: chat.addMessage
@@ -26,6 +32,11 @@ const bindings = {
 
 // subscribe socket to events that handled by redux
 Object.keys(bindings).forEach(event => socket.on(event, bindings[event]));
+
+socket.on(CHAT_INIT, (payload) => {
+    chat.init(payload);
+    localStorage.userId = payload.userId
+});
 
 render(
     <Provider store={store}>

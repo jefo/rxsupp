@@ -3,35 +3,61 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import classNames from 'classnames';
 
+import Message from '../../../../rxsupp.core/src/Message';
+import { MESSAGE_ADD, USER_UPDATE } from '../../../../rxsupp.core/src/chat';
+
 import './chat.css';
 
 const serverUser = { name: 'server' };
 
+const currentUserSelector = createSelector(
+    state => state.users,
+    state => state.socket,
+    (users, socket) => users.get(socket.get('userId'))
+);
+
+const roomUsersSelector = createSelector(
+    currentUserSelector,
+    state => state.users,
+    (currentUser, users) =>
+        users.filter(user => user.get('room') === currentUser.get('room'))
+);
+
+const roomMessagesSelector = createSelector(
+    roomUsersSelector,
+    state => state.messages,
+    (users, messages) => {
+        let ids = users.map(user => user.get('id'));
+        return messages.filter(msg => ids.includes(msg.get('userId')))
+    }
+);
+
 const mapStateToProps = (state, ownProps) => createSelector(
     state => state.users,
-    state => state.messages,
-    state => state.socket,
-    (users, messages, socket) => {
-        let socketId = socket.get('id');
-        if (!socketId) {
-            return { users: [], messages: [] };
-        }
-        let currentUser = users.find(user => user.get('socketId') === socketId);
+    roomMessagesSelector,
+    currentUserSelector,
+    (users, messages, currentUser) => {
         if (!currentUser) {
             return { users: [], messages: [] };
         }
-        let roomId = currentUser.get('roomId');
-        console.log('roomId',roomId);
-        messages = messages
-            .filter(message =>
-                message.get('roomId') === roomId)
-            .map(message =>
-                message
-                    .set('fromCurrent', message.get('socketId') === socketId)
-                    .set('userName', users.find(user => user.get('socketId') === message.get('socketId')).get('login')))
-            .toJS();
-        users = users.filter(user => user.get('status') !== 'disconnect' && user.get('socketId') !== socketId).toJS();
-        return { users: Object.values(users), messages: Object.values(messages), socketId, roomId };
+        let socketId = currentUser.get('socketId');
+        let currentUserId = currentUser.get('id');
+        let room = currentUser.get('room');
+        const msgUser = msg => users.find(user => user.get('id') === msg.get('userId'));
+        let roomUserIds =
+            messages = messages
+                .map(message => message
+                    .set('fromCurrent', message.get('userId') === currentUserId)
+                    .set('userName', msgUser(message).get('login')))
+                .toJS();
+        users = users.filter(user => user.get('status') !== 'disconnect').toJS();
+        return {
+            users: Object.values(users),
+            messages: Object.values(messages),
+            socketId,
+            room,
+            currentUserId
+        };
     }
 );
 
@@ -118,13 +144,23 @@ class Chat extends React.Component {
     }
 
     sendMessage() {
-        chatService.sendMessage(this.state.message, this.props.roomId);
+        const message = new Message({
+            text: this.state.message,
+            userId: this.props.currentUserId,
+            room: this.props.room
+        });
+        this.props.chat.addMessage(message, this.props.room);
+        this.props.socket.emit(MESSAGE_ADD, message);
         this.setState({ message: '' });
     }
 
     onUserClick(user) {
-        // console.log(e)
-        chatService.setUserRoom(user.roomId);
+        let payload = {
+            id: this.props.currentUserId,
+            room: user.room
+        };
+        this.props.chat.updateUser(payload);
+        this.props.socket.emit(USER_UPDATE, payload);
     }
 
     onWinControlClick() {

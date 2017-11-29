@@ -1,3 +1,4 @@
+import Immutable from 'immutable';
 import { createLogger } from 'redux-logger';
 
 export default createLogger({
