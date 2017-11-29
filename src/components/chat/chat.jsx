@@ -126,9 +126,9 @@ class Chat extends React.Component {
         });
         return (
             <div className={chatClassNames}>
-                <div className="window-controls">
+                {/* <div className="window-controls">
                     <span className={winIconClassName} onClick={this.onWinControlClick}></span>
-                </div>
+                </div> */}
                 <div className="chat-wrapper">
                     <div className="users-list">
                         {usersItems}
