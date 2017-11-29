@@ -5,10 +5,9 @@
   "author": "jefo <johnyjefo@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "neutrino start --use neutrino-preset-react",
-    "build": "neutrino build --use neutrino-preset-react",
-    "test": "neutrino test --use neutrino-preset-react neutrino-preset-karma",
-    "server": "node src/server/index.js"
+    "start": "neutrino start",
+    "build": "neutrino build",
+    "test": "neutrino test --use neutrino-preset-react neutrino-preset-karma"
   },
   "dependencies": {
     "buffer": "^5.0.8",

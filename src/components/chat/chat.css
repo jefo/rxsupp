@@ -3,13 +3,13 @@
 }
 
 .chat {
+    font-family: 'Roboto';
     position: absolute;
     bottom: 10px;
     right: 20px;
     box-shadow: 0 0 40px rgba(17,17,17,0.5);
     border: 0;
     background-color: #f1f2f7;
-    padding: 15px 10px;
     border-radius: 3px;
 }
 
@@ -21,19 +21,19 @@
 .chat-wrapper {
     display: flex;
     justify-content: space-between;
-    min-width: 500px;
+    min-width: 550px;
 }
 
 .output {
     height: 350px;
     margin-bottom: 10px;
     padding: 5px 5px 10px 5px;
+    font-size: 12px;
 }
 
 .output-wrapper {
     flex: 1 0 300px;
-    border-left: 1px solid #4d74c7;
-    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .input {
@@ -51,16 +51,41 @@
     color: green;
 }
 
-.user-name {
-    color: #999;
-}
-
 .users-list__item {
-    background-color: #d7d7df;
     padding: 7px;
     cursor: pointer;
-    color: #4d74c7;
-    border: 1px solid;
+    color: #fff;
+}
+
+.user-info {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.user-status {
+    color: #dfe6dd;
+    font-size: 10px;
+}
+
+.users-list__item_selected,
+.users-list__item:hover {
+    background-color: #292f66;
+}
+
+.users-list__item .user-name {
+    color: #fff;
+}
+
+.user-avatar {
+    display: inline-block;
+    padding: 7px;
+    border-radius: 50%;
+    background-color: #F57F17;
+    padding-top: 9px;
+    text-align: center;
+    width: 30px;
+    height: 30px;
+    margin-right: 7px;
 }
 
 .user-name_current  {
@@ -85,8 +110,18 @@
 }
 
 .users-list {
-    flex: 0 0 170px;
+    flex: 0 0 200px;
     margin-right: 10px;
+    font-size: 11px;
+    background-color: #333b72;
+    /* IE9, iOS 3.2+ */
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAxIDEiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjxsaW5lYXJHcmFkaWVudCBpZD0idnNnZyIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMCUiIHkyPSIxMDAlIj48c3RvcCBzdG9wLWNvbG9yPSIjMzIzYTc5IiBzdG9wLW9wYWNpdHk9IjEiIG9mZnNldD0iMCIvPjxzdG9wIHN0b3AtY29sb3I9IiMzMzNiNmIiIHN0b3Atb3BhY2l0eT0iMSIgb2Zmc2V0PSIxIi8+PC9saW5lYXJHcmFkaWVudD48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSJ1cmwoI3ZzZ2cpIiAvPjwvc3ZnPg==);
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%,color-stop(0, rgb(50, 58, 121)),color-stop(1, rgb(51, 59, 107)));
+    /* Android 2.3 */
+    background-image: -webkit-repeating-linear-gradient(top,rgb(50, 58, 121) 0%,rgb(51, 59, 107) 100%);
+    /* IE10+ */
+    background-image: repeating-linear-gradient(to bottom,rgb(50, 58, 121) 0%,rgb(51, 59, 107) 100%);
+    background-image: -ms-repeating-linear-gradient(top,rgb(50, 58, 121) 0%,rgb(51, 59, 107) 100%);
 }
 
 .maximize {

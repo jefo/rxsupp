@@ -16,9 +16,19 @@ const currentUserSelector = createSelector(
     (users, socket) => users.get(socket.get('userId'))
 );
 
+const usersSelector = createSelector(
+    state => state.users,
+    (users) => users.map(u => {
+        let login = u.get('login');
+        let shortName = login[0] + login[login.length - 1];
+        shortName = shortName.toUpperCase();
+        return u.set('shortName', shortName);
+    })
+);
+
 const roomUsersSelector = createSelector(
     currentUserSelector,
-    state => state.users,
+    usersSelector,
     (currentUser, users) =>
         users.filter(user => user.get('room') === currentUser.get('room'))
 );
@@ -33,7 +43,7 @@ const roomMessagesSelector = createSelector(
 );
 
 const mapStateToProps = (state, ownProps) => createSelector(
-    state => state.users,
+    usersSelector,
     roomMessagesSelector,
     currentUserSelector,
     (users, messages, currentUser) => {
@@ -94,9 +104,19 @@ class Chat extends React.Component {
             );
         });
         const usersItems = users.map(user => {
+            let userItemClass = classNames('users-list__item', {
+                'users-list__item_selected': user.room === this.props.room
+            });
+            let avatarStyle = {
+                backgroundColor: user.color
+            };
             return (
-                <div key={user.login} onClick={() => this.onUserClick(user)} className='users-list__item'>
-                    {user.login || user.name}
+                <div key={user.login} onClick={() => this.onUserClick(user)} className={userItemClass}>
+                    <span className="user-avatar" style={avatarStyle}>{user.shortName}</span>
+                    <span className="user-info">
+                        <div className="user-name">{user.login || user.name}</div>
+                        <div className="user-status">№{user.room}</div>
+                    </span>
                 </div>
             );
         });
@@ -117,7 +137,7 @@ class Chat extends React.Component {
                         <div className="output">
                             {messageItems}
                         </div>
-                        <textarea className="input" onKeyPress={this.onInputKeyPress} value={this.state.message} onChange={this.onInputChange}></textarea>
+                        <textarea className="input" onKeyPress={this.onInputKeyPress} value={this.state.message} onChange={this.onInputChange} placeholder="type a message" ></textarea>
                         <button className="btn-send" onClick={this.onSendMessage}>Send</button>
                     </div>
                 </div>
