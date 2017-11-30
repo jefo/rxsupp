@@ -10,7 +10,6 @@
     "test": "neutrino test --use neutrino-preset-react neutrino-preset-karma"
   },
   "dependencies": {
-    "buffer": "^5.0.8",
     "classnames": "^2.2.5",
     "express": "^4.16.2",
     "immutable": "^3.8.2",
@@ -20,9 +19,7 @@
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
     "redux-cli-logger": "^2.0.0",
-    "redux-dynamic-middlewares": "^0.2.1",
     "redux-logger": "^3.0.6",
-    "redux-saga": "^0.16.0",
     "reselect": "^3.0.1",
     "socket.io": "^2.0.4",
     "uuid": "^3.1.0",
