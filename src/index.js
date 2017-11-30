@@ -10,7 +10,8 @@ import {
     USER_ADD,
     USER_UPDATE,
     MESSAGE_ADD,
-    createChat
+    MESSAGES_ADD,    
+    createChat,
 } from '../../rxsupp.core/src/chat';
 import store from './redux/store';
 
@@ -27,7 +28,8 @@ const chat = createChat(store);
 const bindings = {
     [USER_ADD]: chat.addUser,
     [USER_UPDATE]: chat.updateUser,
-    [MESSAGE_ADD]: chat.addMessage
+    [MESSAGE_ADD]: chat.addMessage,
+    [MESSAGES_ADD]: chat.addMessages
 };
 
 // subscribe socket to events that handled by redux

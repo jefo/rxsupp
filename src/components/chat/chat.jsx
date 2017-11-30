@@ -34,12 +34,9 @@ const roomUsersSelector = createSelector(
 );
 
 const roomMessagesSelector = createSelector(
-    roomUsersSelector,
+    currentUserSelector,
     state => state.messages,
-    (users, messages) => {
-        let ids = users.map(user => user.get('id'));
-        return messages.filter(msg => ids.includes(msg.get('userId')))
-    }
+    (user, messages) => messages.filter(msg => msg.get('room') === user.get('room'))
 );
 
 const mapStateToProps = (state, ownProps) => createSelector(
@@ -54,11 +51,17 @@ const mapStateToProps = (state, ownProps) => createSelector(
         let currentUserId = currentUser.get('id');
         let room = currentUser.get('room');
         const msgUser = msg => users.find(user => user.get('id') === msg.get('userId'));
-        let roomUserIds =
-            messages = messages
-                .map(message => message
+        messages = messages
+                .map(message => {
+                    let user = msgUser(message);
+                    return message
                     .set('fromCurrent', message.get('userId') === currentUserId)
-                    .set('userName', msgUser(message).get('login')))
+                    .set('userName', user.get('login'))
+                    .set('avatar', {
+                        color: user.get('color'),
+                        shortName:  user.get('shortName')
+                    })
+                })
                 .toJS();
         users = users.filter(user => user.get('status') !== 'disconnect').toJS();
         return {
@@ -96,10 +99,16 @@ class Chat extends React.Component {
         const messageItems = messages.map(msg => {
             let msgStatusClass = msg.isSent ? 'sent' : 'sending';
             let userClassName = msg.fromCurrent ? 'user-name user-name_current' : 'user-name';
+            let avatarStyle = {
+                backgroundColor: msg.avatar.color
+            };
             return (
-                <div key={msg.timestamp}>
-                    <span className={userClassName}>{msg.userName}:&nbsp;</span>
-                    <span className={'msg ' + msgStatusClass}>{msg.text}</span>
+                <div className="message-wrapper" key={msg.timestamp}>
+                    <div className="user-avatar" style={avatarStyle}>{msg.avatar.shortName}</div>                
+                    <div className="message-text-wrapper">
+                        <div className={userClassName}>{msg.userName}</div>
+                        <div className={'msg ' + msgStatusClass}>{msg.text}</div>
+                    </div>
                 </div>
             );
         });
@@ -138,7 +147,6 @@ class Chat extends React.Component {
                             {messageItems}
                         </div>
                         <textarea className="input" onKeyPress={this.onInputKeyPress} value={this.state.message} onChange={this.onInputChange} placeholder="type a message" ></textarea>
-                        <button className="btn-send" onClick={this.onSendMessage}>Send</button>
                     </div>
                 </div>
             </div>
