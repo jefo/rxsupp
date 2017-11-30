@@ -33,9 +33,14 @@ const roomUsersSelector = createSelector(
         users.filter(user => user.get('room') === currentUser.get('room'))
 );
 
+const messagesSelector = createSelector(
+    state => state.messages,
+    (messages) => messages.sortBy(m => m.get('timestamp'))
+)
+
 const roomMessagesSelector = createSelector(
     currentUserSelector,
-    state => state.messages,
+    messagesSelector,
     (user, messages) => messages.filter(msg => msg.get('room') === user.get('room'))
 );
 
