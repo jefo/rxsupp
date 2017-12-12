@@ -1,0 +1,66 @@
+{
+  "name": "rxsupp.admin",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "repository": "https://github.com/jefo/rxsupp.admin.git",
+  "author": "jefo <johnyjefo@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "neutrino start",
+    "build": "neutrino build",
+    "test": "neutrino test"
+  },
+  "jest": {
+    "setupFiles": [
+      "./test/react_shim.js"
+    ]
+  },
+  "dependencies": {
+    "axios": "^0.17.1",
+    "buffer": "^5.0.8",
+    "classnames": "^2.2.5",
+    "enzyme": "^3.2.0",
+    "express": "^4.16.2",
+    "history": "^4.7.2",
+    "immutable": "^3.8.2",
+    "lodash": "^4.17.4",
+    "neutrino-preset-node": "^7.3.3",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-images-upload": "^1.1.1",
+    "react-redux": "^5.0.6",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "react-router-redux": "^4.0.8",
+    "redux": "^3.7.2",
+    "redux-actions": "^2.2.1",
+    "redux-cli-logger": "^2.0.0",
+    "redux-logger": "^3.0.6",
+    "redux-router": "^2.1.2",
+    "redux-saga": "^0.16.0",
+    "reselect": "^3.0.1",
+    "rmwc": "^0.0.1-rc9",
+    "seamless-immutable": "^7.1.2",
+    "semantic-ui-css": "^2.2.12",
+    "semantic-ui-react": "^0.77.0"
+  },
+  "devDependencies": {
+    "enzyme-adapter-react-16": "^1.1.0",
+    "moxios": "^0.4.0",
+    "neutrino": "^7.3.1",
+    "neutrino-preset-karma": "^7.3.1",
+    "neutrino-preset-react": "^7.3.1",
+    "react-addons-test-utils": "^15.6.2",
+    "redux-devtools": "^3.4.1",
+    "redux-devtools-extension": "^2.13.2",
+    "redux-devtools-inspector": "^0.11.3",
+    "redux-saga-test-plan": "^3.3.1",
+    "babel-preset-jest": "^21.0.2",
+    "deepmerge": "^1.5.1",
+    "eslint-plugin-jest": "^21.0.2",
+    "jest-cli": "^21.0.2",
+    "neutrino-middleware-loader-merge": "^7.3.3",
+    "ramda": "^0.24.1",
+    "yargs": "^9.0.1"
+  }
+}
