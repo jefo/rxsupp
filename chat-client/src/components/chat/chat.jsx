@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import classNames from 'classnames';
 
-import Message from '../../../../rxsupp.core/src/Message';
-import { MESSAGE_ADD, USER_UPDATE } from '../../../../rxsupp.core/src/chat';
+import Message from '../../../../common/src/Message';
+import { MESSAGE_ADD, USER_UPDATE } from '../../../../common/src/chat';
 
 import './chat.css';
 

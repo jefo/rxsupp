@@ -17,7 +17,7 @@ const api = restify.createServer({
 const chatServer = new ChatServer({ httpServer: api.server });
 chatServer.start();
 
-const corsMiddleware = require('restify-cors-middleware')
+const corsMiddleware = require('restify-cors-middleware');
 
 const cors = corsMiddleware({
     origins: ['*'],

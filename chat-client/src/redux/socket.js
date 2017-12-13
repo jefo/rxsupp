@@ -1,6 +1,6 @@
 import { Map } from 'immutable';
 
-import { CHAT_INIT } from '../../../rxsupp.core/src/chat';
+import { CHAT_INIT } from '../../../common/src/chat';
 
 export default (state = Map(), { type, payload }) => {
     switch (type) {

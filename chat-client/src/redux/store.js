@@ -2,7 +2,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import logger from './logger';
-import createChatReducer, { createChat } from '../../../rxsupp.core/src/chat';
+import createChatReducer, { createChat } from '../../../common/src/chat';
 import socket from './socket';
 
 const composeEnhancers = composeWithDevTools({});

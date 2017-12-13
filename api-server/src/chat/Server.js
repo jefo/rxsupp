@@ -24,16 +24,15 @@ let colors = {
 
 export default class Server {
 
-    isRunnin = false;
-
     constructor(options = {}) {
+        this.isRunnin = false;
+        this.chat = createChat(store);
         if (options.port) {
             this.io = socketio(options.port);
             this.isRunnin = true;
         } else if (options.httpServer) {
             this.httpServer = options.httpServer;
         }
-        this.chat = createChat(store);
     }
 
     start() {
@@ -41,7 +40,7 @@ export default class Server {
             return;
         }
         this.io = socketio.listen(this.httpServer);
-        this.io.on('connection', this.onConnection);
+        this.io.on('connection', this.onConnection.bind(this));
         this.isRunnin = true;
     }
 

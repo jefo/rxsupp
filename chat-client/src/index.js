@@ -12,7 +12,7 @@ import {
     MESSAGE_ADD,
     MESSAGES_ADD,    
     createChat,
-} from '../../rxsupp.core/src/chat';
+} from '../../common/src/chat';
 import store from './redux/store';
 
 let ioOptions = {};
