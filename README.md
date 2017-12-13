@@ -14,7 +14,7 @@ Customer and operator chat clients
 - semantic-ui
 
 ### dashboard
-Chat admin dashboard for managing users, customers, tickets and chat server
+Admin dashboard for managing users, customers, tickets and chat server
 - react
 - redux
 - jest
