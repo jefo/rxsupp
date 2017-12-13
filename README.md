@@ -5,3 +5,17 @@ Provides REST-api for entities such as users and socket.io server for chat clien
 - restify  
 - mongoose
 - socket.io
+
+### chat-client
+Customer and operator chat clients
+- react
+- redux
+- jest
+- semantic-ui
+
+### dashboard
+Chat admin dashboard for managing users, customers, tickets and chat server
+- react
+- redux
+- jest
+- semantic-ui
