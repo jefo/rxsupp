@@ -1,7 +1,7 @@
 {
-  "name": "rxsupp.admin-server",
+  "name": "rxsupp.api-server",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/index.js",
   "repository": "https://github.com/jefo/rxsupp.admin-server.git",
   "author": "jefo <johnyjefo@gmail.com>",
   "license": "MIT",
@@ -14,16 +14,15 @@
   "devDependencies": {
     "neutrino": "^7.3.2",
     "neutrino-preset-mocha": "^7.3.2",
-    "neutrino-preset-node": "^7.3.2",
-    "redux-logger-server": "^1.0.0"
+    "neutrino-preset-node": "^7.3.2"
   },
   "dependencies": {
     "mongoose": "^4.13.5",
     "mongoose-seed": "^0.4.0",
     "passport-restify": "^1.0.1",
+    "redux": "^3.7.2",
     "restify": "^6.3.4",
     "restify-cors-middleware": "^1.0.1",
-    "source-map-support": "^0.5.0",
-    "uuid": "^3.1.0"
+    "socket.io": "^2.0.4"
   }
 }

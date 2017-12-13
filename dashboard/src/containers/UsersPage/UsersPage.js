@@ -4,10 +4,10 @@ import { createSelector } from 'reselect';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import UsersList from '../../components/Users/UsersList';
-import UserForm from './UserForm';
+import UserForm from '../../components/Users/UserForm';
 import { Actions } from '../../redux/users';
 
-export default class UsersPage extends React.Component {
+class UsersPage extends React.Component {
 
     componentWillMount() {
         this.props.usersFetch();

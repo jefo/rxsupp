@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware } from 'redux';
 
-import createChatReducer, { createChat } from '../../rxsupp.core/src/chat';
+import createChatReducer, { createChat } from '../../../common/src/chat';
 
 const store = createStore(
     createChatReducer(),

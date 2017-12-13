@@ -21,7 +21,7 @@ if(localStorage.userId) {
     ioOptions.query = { userId: localStorage.userId }
 }
 
-const socket = io('http://localhost:3000', ioOptions);
+const socket = io('http://localhost:8080', ioOptions);
 const chat = createChat(store);
 
 // socket-redux event handler map

@@ -3,11 +3,11 @@ import { Form, Grid, Button, Segment, Header, Sidebar, Menu, Icon, Divider } fro
 import { Switch, Route, Link } from 'react-router-dom';
 
 import UsersPage from '../UsersPage/UsersPage';
-import ChatServerManager from '../ChatServerManager/ChatServerManager';
+import ChatServerManager from '../../components/ChatServerManager/ChatServerManager';
 
-import './DashoboardLayout.css';
+import './DashboardLayout.css';
 
-export default class DashoboardLayout extends React.Component {
+export default class DashboardLayout extends React.Component {
 
     state = {}
 

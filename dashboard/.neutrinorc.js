@@ -6,4 +6,5 @@ module.exports = (neutrino) => {
   neutrino.use(react);
   neutrino.use(jest);
   neutrino.config.output.publicPath('/');
+  neutrino.config.devServer.port(5001);
 };
