@@ -24,6 +24,6 @@
     "redux": "^3.7.2",
     "restify": "^6.3.4",
     "restify-cors-middleware": "^1.0.1",
-    "socket.io": "^2.0.4"
+    "socket.io": "^2.4.0"
   }
 }
